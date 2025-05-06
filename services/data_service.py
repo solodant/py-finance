@@ -1,4 +1,5 @@
 from data.csv_loader import CSVDataLoader
+from data.excel_loader import ExcelDataLoader
 from data.api.yahoo_loader import YahooFinanceLoader
 
 class DataService:
@@ -10,6 +11,9 @@ class DataService:
         if args.csv:
             data = CSVDataLoader().load(args.csv)
             title = f"CSV: {args.csv}"
+        elif args.excel: 
+            data = ExcelDataLoader().load(args.excel)
+            title = f"Excel: {args.excel}"
         else:
             data = YahooFinanceLoader().load(args.ticker, args.period)
             title = f"{args.ticker.upper()} ({args.period})"
