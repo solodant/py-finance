@@ -8,8 +8,12 @@
 
 ```bash
 python -m venv venv
+```
+```bash
 .\venv\Scripts\activate  # Windows
 source venv/bin/activate  # macOS/Linux
+```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -31,7 +35,7 @@ python app.py --key <KEY> --period <TIME>
 
 ### Аргументы:
 
-- `--key`:
+- `Вместо --key`:
   - `--csv <путь к CSV-файлу>`
   - `--excel <путь к Excel-файлу>`
   - `--ticker <тикер акции>` (прим. тикера `AAPL`)
