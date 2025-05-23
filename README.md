@@ -1,11 +1,11 @@
-## py-finance application
+### py-finance application
 
 Приложение для финансовой аналитики
 
 ## Первоначальная установка:
-    '''python -m venv venv'''
-    '''.\venv\Scripts\activate'''
-    '''pip install -r requirements.txt'''
+    ```python -m venv venv```
+    ```.\venv\Scripts\activate```
+    ```pip install -r requirements.txt```
 
 ## Возможности:
     - Загрузка данных об акциях с API Yahoo Finance
@@ -13,12 +13,14 @@
     - Визуализация цены, доходности и волотильности
 
 ## Функционал CLI:
-    -'''python app.py --key NAME --period TIME'''
+    ```python app.py --key NAME --period TIME```
 
-    key: ключ --сsv, --excel или --ticker (для Yahoo Finance)
-    NAME: в случае с csv и excel - путь до файла
-          в случае с ticker - тикер акции (например, AAPL)
-    period: задание периода
-    TIME: период (например, 1mo, 1y, max, ytd)
+    **Аргументы**:
+        key: ключ --сsv, --excel или --ticker (для Yahoo Finance)
+        NAME: в случае с csv и excel - путь до файла
+            в случае с ticker - тикер акции (например, AAPL)
+        period: задание периода
+        TIME: период (например, 1mo, 1y, max, ytd)
 
-    -Для тестов используйте '''tox'''
+## Для запуска тестов
+    ```tox```
