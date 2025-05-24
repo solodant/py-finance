@@ -7,21 +7,22 @@ from core.exceptions import DataLoadError
 class YahooFinanceLoader(BaseDataLoader):
     """Data loader for Yahoo Finance API."""
     
-    def load(self, ticker: str, period: str = '1y') -> pd.DataFrame:
-        """Load financial data from Yahoo Finance.
+    def load(self, info: str, period: str = '1y') -> pd.DataFrame:
+        """
+        Load financial data from Yahoo Finance.
         
         Args:
-            ticker: Stock ticker symbol (e.g., 'AAPL')
+            symbol: Financial instrument symbol (ticker, currency pair, etc.)
             period: Time period to load (1d, 1mo, 1y, etc.)
-            
+        
         Returns:
             pd.DataFrame: Loaded market data
-            
+        
         Raises:
             DataLoadError: If API request fails
         """
         try:
-            data = yf.download(ticker, period=period)
+            data = yf.download(info, period=period)
             self._validate_data(data)
             return data
         except Exception as e:
