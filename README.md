@@ -39,10 +39,9 @@ python app.py --key KEY --period TIME
 - `Вместо --key KEY`:
   - `--csv путь/к/файлу.csv`
   - `--excel путь/к/файлу.xlsx или файлу.xls`
-  - `--ticker тикер акции` (прим., --ticker AAPL)
-  - `--currencies пара валют` (прим., e.g., --currencies USDRUB EURRUB)
-- `--period TIME` — период анализа:
-  - Примеры: `1mo`, `6mo`, `1y`, `ytd`, `max`
+  - `--ticker тикер акции`
+  - `--currencies пара валют`
+- `Опционально --period TIME`
 
 ---
 

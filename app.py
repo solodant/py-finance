@@ -1,8 +1,11 @@
 from cli.parser import parse_arguments
-from services.data_service import DataService
+from cli.parser import VALID_PERIODS, SUPPORTED_CURRENCY_PAIRS, SUPPORTED_STOCK_NAMES
 from services.analysis import AnalysisService
-from services.visualization import VisualizationService, CurrencyVisualizationService
-from services.currency_service import SUPPORTED_CURRENCY_PAIRS
+from services.data_service import DataService
+from services.visualization import (
+    VisualizationService,
+    CurrencyVisualizationService,
+)
 
 
 def main():
@@ -10,14 +13,38 @@ def main():
 
     if not any([args.currencies, args.tickers, args.csv, args.excel]):
         print("\n⚠️  No data source specified.")
-        print("You can use one of the following options:\n")
-        print("  --tickers      Load stock data by ticker(s) (e.g., --tickers AAPL MSFT)")
-        print("  --csv          Load market data from a CSV file (e.g., --csv path/to/file.csv)")
-        print("  --excel        Load market data from an Excel file (e.g., --excel path/to/file.xlsx)")
-        print("  --currencies   Analyze currency pairs (e.g., --currencies USDRUB EURRUB)\n")
+        print("Please specify one of the following options to load data:\n")
 
-        print("💱 Available currency pairs:")
-        print("  ", ", ".join(SUPPORTED_CURRENCY_PAIRS))
+        print("📄 CSV File:")
+        print("  --csv path/to/file.csv")
+        print("  Load market data from a local CSV file.\n")
+
+        print("📊 Excel File:")
+        print("  --excel path/to/file.xlsx")
+        print("  Load market data from a local Excel file.\n")
+
+        print("💱 Currency Analysis:")
+        print("  --currencies USDRUB EURRUB")
+        print("  Analyze currency exchange rate pairs.\n")
+        print("  ✅ Supported currency pairs:")
+        print("    ", ", ".join(SUPPORTED_CURRENCY_PAIRS), "\n")
+
+        print("📈 Stock Market Analysis:")
+        print("  --tickers AAPL MSFT")
+        print("  Analyze stock data by specifying ticker symbols.\n")
+        print("  ✅ Supported stock tickers:")
+        print("    ", ", ".join(SUPPORTED_STOCK_NAMES), "\n")
+
+        print("⏱️  Period Option (optional):")
+        print("  --period 1mo")
+        print("  Time period for Yahoo Finance data (default is 1y).\n")
+        print("  ✅ Supported periods:")
+        print("    ", ", ".join(VALID_PERIODS), "\n")
+
+        print("💡 Example:")
+        print("  python app.py --tickers AAPL MSFT --period 6mo")
+        print("  python app.py --currencies USDRUB EURRUB --period 1y")
+
         return
 
     try:
@@ -26,22 +53,17 @@ def main():
         print(f"❌ Error: {e}")
         return
 
-    # Валюты (dict[str, pd.Series])
     if args.currencies:
         analysis = AnalysisService.analyze_multiple(data)
         CurrencyVisualizationService.show(data, title)
 
-    # Несколько тикеров (dict[str, pd.Series])
     elif args.tickers:
-        tickers = [t.upper() for t in args.tickers]
-        # data и title уже получены выше — используем их напрямую
         analysis_results = AnalysisService.analyze_multiple(data)
-        
+
         for ticker, series in data.items():
             analysis = analysis_results[ticker]
             VisualizationService.show(series, analysis, ticker)
 
-    # CSV или Excel (pd.DataFrame)
     else:
         analysis = AnalysisService.analyze(data)
         VisualizationService.show(data["Close"], analysis, title)

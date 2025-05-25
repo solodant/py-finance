@@ -1,7 +1,7 @@
 from data.csv_loader import CSVDataLoader
 from data.excel_loader import ExcelDataLoader
-from services.stock_service import StockService
 from services.currency_service import CurrencyService
+from services.stock_service import StockService
 
 
 class DataService:

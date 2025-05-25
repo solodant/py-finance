@@ -1,7 +1,6 @@
-from data.api.yahoo_loader import YahooFinanceLoader
 import pandas as pd
-
-SUPPORTED_STOCK_NAMES = []
+from core.exceptions import DataLoadError
+from data.api.yahoo_loader import YahooFinanceLoader
 
 
 class StockService:
@@ -14,14 +13,15 @@ class StockService:
     def load_stocks(self, tickers: list[str]) -> dict[str, pd.Series]:
         all_data = self.loader.load(tickers, self.period)
 
-        if isinstance(all_data, dict):  
-            return {
-                ticker.upper(): df['Close']
-                for ticker, df in all_data.items()
-                if 'Close' in df.columns
-            }
+        if isinstance(all_data, dict):
+            result = {}
+            for ticker, df in all_data.items():
+                if "Close" not in df.columns:
+                    raise DataLoadError(f"'Close' column missing for {ticker}")
+                result[ticker.upper()] = df["Close"]
+            return result
 
         ticker = tickers[0].upper()
-        if 'Close' not in all_data.columns:
-            raise ValueError(f"'Close' column missing for ticker {ticker}")
-        return {ticker: all_data['Close']}
+        if "Close" not in all_data.columns:
+            raise DataLoadError(f"'Close' column missing for ticker {ticker}")
+        return {ticker: all_data["Close"]}
