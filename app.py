@@ -1,10 +1,15 @@
 from cli.parser import parse_arguments
-from cli.parser import VALID_PERIODS, SUPPORTED_CURRENCY_PAIRS, SUPPORTED_STOCK_NAMES
+from cli.parser import (
+    VALID_PERIODS, 
+    SUPPORTED_CURRENCY_PAIRS, 
+    SUPPORTED_STOCK_NAMES,
+)
 from services.analysis import AnalysisService
 from services.data_service import DataService
 from services.visualization import (
     VisualizationService,
     CurrencyVisualizationService,
+    StockVisualizationService,
 )
 
 
@@ -54,15 +59,11 @@ def main():
         return
 
     if args.currencies:
-        analysis = AnalysisService.analyze_multiple(data)
         CurrencyVisualizationService.show(data, title)
 
     elif args.tickers:
         analysis_results = AnalysisService.analyze_multiple(data)
-
-        for ticker, series in data.items():
-            analysis = analysis_results[ticker]
-            VisualizationService.show(series, analysis, ticker)
+        StockVisualizationService.show(data, analysis_results)
 
     else:
         analysis = AnalysisService.analyze(data)
