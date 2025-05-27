@@ -1,3 +1,9 @@
+"""
+Module providing visualization services for financial data,
+including single asset visualization, currency price dynamics
+with correlation, and multiple stock visualizations.
+"""
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -10,9 +16,15 @@ class VisualizationService:
     """Service for single asset data visualization (e.g., one stock)."""
 
     @staticmethod
-    def show(prices: pd.Series, analysis: dict, title: str):
-        """Display price, returns and volatility for one asset."""
+    def show(prices: pd.Series, analysis: dict[str, pd.Series], title: str) -> None:
+        """
+        Display price, returns, and volatility charts for one asset.
 
+        Args:
+            prices: Series of asset prices indexed by date.
+            analysis: Dictionary with 'returns' and 'volatility' Series.
+            title: Title for the plot.
+        """
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
         fig.suptitle(f"{title}", fontsize=16)
 
@@ -21,15 +33,27 @@ class VisualizationService:
         ax1.legend()
         ax1.grid(True)
 
-        ax2.plot(analysis["returns"].index, analysis["returns"].values, label="Returns", color="green")
+        ax2.plot(
+            analysis["returns"].index,
+            analysis["returns"].values,
+            label="Returns",
+            color="green",
+        )
 
         ax2_vol = ax2.twinx()
-        ax2_vol.plot(analysis["volatility"].index, analysis["volatility"].values, label="Volatility", color="red")
+        ax2_vol.plot(
+            analysis["volatility"].index,
+            analysis["volatility"].values,
+            label="Volatility",
+            color="red",
+        )
 
         ax2.set_ylabel("Returns")
         ax2_vol.set_ylabel("Volatility")
 
-        lines = ax2.get_legend_handles_labels()[0] + ax2_vol.get_legend_handles_labels()[0]
+        lines = (
+            ax2.get_legend_handles_labels()[0] + ax2_vol.get_legend_handles_labels()[0]
+        )
         labels = ["Returns", "Volatility"]
         ax2.legend(lines, labels, loc="upper left")
 
@@ -42,8 +66,14 @@ class CurrencyVisualizationService:
     """Service to visualize currency price dynamics and correlation."""
 
     @staticmethod
-    def show(currency_data: dict[str, pd.Series], title: str):
-        """Display price charts and correlation matrix for currencies."""
+    def show(currency_data: dict[str, pd.Series], title: str) -> None:
+        """
+        Display price charts and correlation matrix for multiple currencies.
+
+        Args:
+            currency_data: Dictionary mapping currency pairs to their price Series.
+            title: Title for the plots.
+        """
         df = pd.DataFrame(currency_data)
         corr = df.pct_change(fill_method=None).corr()
 
@@ -71,8 +101,18 @@ class StockVisualizationService:
     """Service for visualizing multiple stocks."""
 
     @staticmethod
-    def show(price_data_dict: dict[str, pd.Series], analysis_dict: dict[str, dict[str, pd.Series]]):
-        """Display prices, returns, and volatility for multiple stocks."""
+    def show(
+        price_data_dict: dict[str, pd.Series],
+        analysis_dict: dict[str, dict[str, pd.Series]],
+    ) -> None:
+        """
+        Display prices, returns, and volatility for multiple stocks.
+
+        Args:
+            price_data_dict: Dictionary mapping tickers to price Series.
+            analysis_dict: Nested dictionary mapping tickers to their analysis,
+                           each containing 'returns' and 'volatility' Series.
+        """
         tickers = list(price_data_dict.keys())
 
         fig, axes = plt.subplots(3, 1, figsize=(15, 12), sharex=True)
@@ -82,24 +122,36 @@ class StockVisualizationService:
         color_map = dict(zip(tickers, palette))
 
         for ticker in tickers:
-            axes[0].plot(price_data_dict[ticker].index, price_data_dict[ticker].values,
-                         label=ticker, color=color_map[ticker])
+            axes[0].plot(
+                price_data_dict[ticker].index,
+                price_data_dict[ticker].values,
+                label=ticker,
+                color=color_map[ticker],
+            )
         axes[0].set_ylabel("Price")
         axes[0].legend(title="Ticker")
         axes[0].grid(True)
 
         for ticker in tickers:
             ret_series = analysis_dict[ticker]["returns"]
-            axes[1].plot(ret_series.index, ret_series.values,
-                         label=ticker, color=color_map[ticker])
+            axes[1].plot(
+                ret_series.index,
+                ret_series.values,
+                label=ticker,
+                color=color_map[ticker],
+            )
         axes[1].set_ylabel("Returns")
         axes[1].legend(title="Ticker")
         axes[1].grid(True)
 
         for ticker in tickers:
             vol_series = analysis_dict[ticker]["volatility"]
-            axes[2].plot(vol_series.index, vol_series.values,
-                         label=ticker, color=color_map[ticker])
+            axes[2].plot(
+                vol_series.index,
+                vol_series.values,
+                label=ticker,
+                color=color_map[ticker],
+            )
         axes[2].set_ylabel("Volatility")
         axes[2].legend(title="Ticker")
         axes[2].grid(True)

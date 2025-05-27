@@ -1,3 +1,10 @@
+"""
+Command-line interface (CLI) argument parser for PyFinance financial analysis tool.
+
+Defines valid time periods, supported currency pairs, and stock tickers.
+Parses, validates, and normalizes CLI inputs.
+"""
+
 import argparse
 
 VALID_PERIODS = ["1d", "5d", "1mo", "6mo", "ytd", "1y", "5y", "max"]
@@ -30,7 +37,14 @@ SUPPORTED_STOCK_NAMES = [
 
 
 def parse_arguments() -> argparse.Namespace:
-    """Parse and validate CLI arguments."""
+    """Parse and validate command-line arguments for PyFinance.
+
+    Returns:
+        argparse.Namespace: Parsed and validated CLI arguments.
+
+    Raises:
+        SystemExit: If validation of currencies or tickers fails.
+    """
     parser = argparse.ArgumentParser(description="PyFinance - Financial Analysis Tool")
 
     parser.add_argument(

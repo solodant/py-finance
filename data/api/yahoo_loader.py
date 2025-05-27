@@ -1,3 +1,8 @@
+"""
+Module for loading financial data using the Yahoo Finance API,
+with validation and error handling.
+"""
+
 import yfinance as yf
 import pandas as pd
 from data.base_loader import BaseDataLoader
@@ -6,23 +11,23 @@ from core.exceptions import DataLoadError
 
 class YahooFinanceLoader(BaseDataLoader):
     """Data loader for Yahoo Finance API."""
-    
-    def load(self, info: str, period: str = '1y') -> pd.DataFrame:
+
+    def load(self, symbol: str, period: str = "1y") -> pd.DataFrame:
         """
         Load financial data from Yahoo Finance.
-        
+
         Args:
-            symbol: Financial instrument symbol (ticker, currency pair, etc.)
-            period: Time period to load (1d, 1mo, 1y, etc.)
-        
+            symbol: Financial instrument symbol (ticker, currency pair, etc.).
+            period: Time period to load (e.g., '1d', '1mo', '1y').
+
         Returns:
-            pd.DataFrame: Loaded market data
-        
+            pd.DataFrame: Loaded market data.
+
         Raises:
-            DataLoadError: If API request fails
+            DataLoadError: If API request fails.
         """
         try:
-            data = yf.download(info, period=period)
+            data = yf.download(symbol, period=period)
             self._validate_data(data)
             return data
         except Exception as e:

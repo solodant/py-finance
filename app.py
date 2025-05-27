@@ -1,7 +1,21 @@
+"""
+Main application script for PyFinance financial analysis tool.
+
+Parses CLI arguments to load financial data from various sources (CSV, Excel,
+Yahoo Finance for stocks or currencies), performs analysis, and visualizes
+results accordingly.
+
+Usage examples:
+    python app.py --csv data_example/test_data.csv
+    python app.py --excel data_example/test_data.xlsx
+    python app.py --tickers AAPL MSFT --period 6mo
+    python app.py --currencies USDRUB EURRUB --period 1y
+"""
+
 from cli.parser import parse_arguments
 from cli.parser import (
-    VALID_PERIODS, 
-    SUPPORTED_CURRENCY_PAIRS, 
+    VALID_PERIODS,
+    SUPPORTED_CURRENCY_PAIRS,
     SUPPORTED_STOCK_NAMES,
 )
 from services.analysis import AnalysisService
@@ -13,7 +27,8 @@ from services.visualization import (
 )
 
 
-def main():
+def main() -> None:
+    """Main entry point for the application."""
     args = parse_arguments()
 
     if not any([args.currencies, args.tickers, args.csv, args.excel]):
@@ -47,6 +62,8 @@ def main():
         print("    ", ", ".join(VALID_PERIODS), "\n")
 
         print("💡 Example:")
+        print("  python app.py --csv data_example/test_data.csv")
+        print("  python app.py --excel data_example/test_data.xlsx")
         print("  python app.py --tickers AAPL MSFT --period 6mo")
         print("  python app.py --currencies USDRUB EURRUB --period 1y")
 
