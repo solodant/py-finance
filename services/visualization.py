@@ -13,7 +13,7 @@ sns.set(style="darkgrid")
 
 
 class VisualizationService:
-    """Service for single asset data visualization (e.g., one stock)."""
+    """Service for single asset data visualization."""
 
     @staticmethod
     def show(prices: pd.Series, analysis: dict[str, pd.Series], title: str) -> None:
